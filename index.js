@@ -20,6 +20,9 @@ app.use(bodyParser.json())
 
 
 const port = 9000
+app.get('/',(req,res)=>{
+  res.send("hello..i am here")
+})
 
 
 
