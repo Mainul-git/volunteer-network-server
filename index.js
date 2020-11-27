@@ -30,14 +30,14 @@ const client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: 
 client.connect(err => {
   const volunteerTasks = client.db("volunteerAssign").collection("volunteerRepeat");
   const userDetail = client.db("volunteerAssign").collection("information");
-
+  const adminCollection = client.db("volunteerAssign").collection("adminPanel");
 app.post('/addVolunteer',(req,res)=>{
   const detail=req.body
   userDetail.insertOne(detail)
   .then(result=>{
-    res.send(result.insertedCount>0)
+    res.send(result)
   })
-  console.log()
+  
 })
 
 app.get('/getVolunteer',(req,res)=>{
@@ -62,14 +62,26 @@ app.get('/getVolunteerInfo',(req,res)=>{
   app.delete('/deleteItem/:id',(req,res)=>{
     userDetail.deleteOne({_id:ObjectId(req.params.id)})
     .then(result=>{
-      res.send( result.deletedCount > 0);
+      res.send( result);
     })
-  
-
-
   })
+
+  app.post("/check-admin", (req, res) => {
+    const email = req.body.email;
+    adminCollection.find({ email: email })
+    .toArray((err, doc) => {
+      if (doc.length === 0) {
+        res.send({ admin: false });
+      } else {
+        res.send({ admin: true });
+      }
+    
+    });
+   
+  });
+
 });
 
 
-
+ // "start:dev": "nodemon index.js",
 app.listen(process.env.PORT || port)
