@@ -83,5 +83,5 @@ app.get('/getVolunteerInfo',(req,res)=>{
 });
 
 
- // "start:dev": "nodemon index.js",
+
 app.listen(process.env.PORT || port)
